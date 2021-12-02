@@ -123,9 +123,57 @@ impl From<String> for BigInt {
 
 
 impl From<&str> for BigInt {
-    fn from(string: &str) -> Self {
-        return Self::from(String::from(string));
-    }
+    fn from(string: &str) -> Self { Self::from(String::from(string)) }
+}
+
+
+impl From<i8> for BigInt {
+    fn from(int: i8) -> Self { Self::from(int.to_string()) }
+}
+
+
+impl From<i16> for BigInt {
+    fn from(int: i16) -> Self { Self::from(int.to_string()) }
+}
+
+
+impl From<i32> for BigInt {
+    fn from(int: i32) -> Self { Self::from(int.to_string()) }
+}
+
+
+impl From<i64> for BigInt {
+    fn from(int: i64) -> Self { Self::from(int.to_string()) }
+}
+
+
+impl From<i128> for BigInt {
+    fn from(int: i128) -> Self { Self::from(int.to_string()) }
+}
+
+
+impl From<u8> for BigInt {
+    fn from(int: u8) -> Self { Self::from(int.to_string()) }
+}
+
+
+impl From<u16> for BigInt {
+    fn from(int: u16) -> Self { Self::from(int.to_string()) }
+}
+
+
+impl From<u32> for BigInt {
+    fn from(int: u32) -> Self { Self::from(int.to_string()) }
+}
+
+
+impl From<u64> for BigInt {
+    fn from(int: u64) -> Self { Self::from(int.to_string()) }
+}
+
+
+impl From<u128> for BigInt {
+    fn from(int: u128) -> Self { Self::from(int.to_string()) }
 }
 
 
@@ -150,5 +198,33 @@ mod tests {
     fn from_string() {
         assert_eq!(BigInt::from("1337").number, String::from("1337"));
         assert_eq!(BigInt::from("-100").number, String::from("-100"));
+    }
+
+    #[test]
+    fn from_integer() {
+        assert_eq!(BigInt::from(i8::MAX as i8).number, (i8::MAX as i8).to_string());
+        assert_eq!(BigInt::from(i8::MIN as i8).number, (i8::MIN as i8).to_string());
+        assert_eq!(BigInt::from(i16::MAX as i16).number, (i16::MAX as i16).to_string());
+        assert_eq!(BigInt::from(i16::MIN as i16).number, (i16::MIN as i16).to_string());
+        assert_eq!(BigInt::from(i32::MAX as i32).number, (i32::MAX as i32).to_string());
+        assert_eq!(BigInt::from(i32::MIN as i32).number, (i32::MIN as i32).to_string());
+        assert_eq!(BigInt::from(i64::MAX as i64).number, (i64::MAX as i64).to_string());
+        assert_eq!(BigInt::from(i64::MIN as i64).number, (i64::MIN as i64).to_string());
+        assert_eq!(BigInt::from(i128::MAX as i128).number, (i128::MAX as i128).to_string());
+        assert_eq!(BigInt::from(i128::MIN as i128).number, (i128::MIN as i128).to_string());
+    }
+
+    #[test]
+    fn from_unsigned_integer() {
+        assert_eq!(BigInt::from(u8::MAX as u8).number, (u8::MAX as u8).to_string());
+        assert_eq!(BigInt::from(u8::MIN as u8).number, (u8::MIN as u8).to_string());
+        assert_eq!(BigInt::from(u16::MAX as u16).number, (u16::MAX as u16).to_string());
+        assert_eq!(BigInt::from(u16::MIN as u16).number, (u16::MIN as u16).to_string());
+        assert_eq!(BigInt::from(u32::MAX as u32).number, (u32::MAX as u32).to_string());
+        assert_eq!(BigInt::from(u32::MIN as u32).number, (u32::MIN as u32).to_string());
+        assert_eq!(BigInt::from(u64::MAX as u64).number, (u64::MAX as u64).to_string());
+        assert_eq!(BigInt::from(u64::MIN as u64).number, (u64::MIN as u64).to_string());
+        assert_eq!(BigInt::from(u128::MAX as u128).number, (u128::MAX as u128).to_string());
+        assert_eq!(BigInt::from(u128::MIN as u128).number, (u128::MIN as u128).to_string());
     }
 }
