@@ -22,6 +22,7 @@ impl BigInt {
         };
     }
 
+    #[inline]
     pub fn len(&self) -> usize {
         return self.number.len();
     }
@@ -73,35 +74,62 @@ impl PartialEq for BigInt {
 // }
 
 
-// impl PartialOrd for BigInt {
-//     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-//         return None;
-//     }
+impl PartialOrd for BigInt {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        todo!();
+    }
     
-//     fn lt(&self, other: &Self) -> bool {
-//         return false;
-//     }
+    fn lt(&self, other: &Self) -> bool {
+        if !(self <= other) { return false; }
+        if self == other { return false; }
+        return true;
+    }
     
-//     fn le(&self, other: &Self) -> bool {
-//         return false;
-//     }
+    fn le(&self, other: &Self) -> bool {
+        if self.len() < other.len() { return true; }
+        if self.len() > other.len() { return false; }
+
+        let self_chars = self.number.chars().collect::<Vec<char>>();
+        let other_chars = other.number.chars().collect::<Vec<char>>();
+        for i in 0 .. self.len() {
+            if self_chars[i] > other_chars[i] {
+                return false;
+            }
+        }
+
+        return true;
+    }
     
-//     fn gt(&self, other: &Self) -> bool {
-//         return false;
-//     }
+    fn gt(&self, other: &Self) -> bool {
+        if !(self >= other) { return false; }
+        if self == other { return false; }
+        return true;
+    }
     
-//     fn ge(&self, other: &Self) -> bool {
-//         return false;
-//     }
-// }
+    fn ge(&self, other: &Self) -> bool {
+        if self.len() < other.len() { return false; }
+        if self.len() > other.len() { return true; }
+
+        let self_chars = self.number.chars().collect::<Vec<char>>();
+        let other_chars = other.number.chars().collect::<Vec<char>>();
+        for i in 0 .. self.len() {
+            if self_chars[i] < other_chars[i] {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
 
 
 impl From<String> for BigInt {
     fn from(string: String) -> Self {
-        let mut result: BigInt = BigInt::new();
-        let temp = string.strip_prefix("-");
+        if string.len() == 0 { return Self::new(); }
 
-        match temp {
+        let mut result: BigInt = BigInt::new();
+
+        match string.strip_prefix("-") {
             Some(s) => {
                 if s.chars().all(char::is_numeric) {
                     result.number = String::from(s);
@@ -183,15 +211,15 @@ mod tests {
 
     #[test]
     fn eq() {
-        assert_eq!(BigInt::from("-4239"), BigInt::from("-4239"));
-        assert_eq!(BigInt::from("63"), BigInt::from("63"));
+        assert_eq!(BigInt::from(-4239), BigInt::from(-4239));
+        assert_eq!(BigInt::from(63), BigInt::from(63));
     }
 
     #[test]
     fn ne() {
-        assert_ne!(BigInt::from("777"), BigInt::from("89"));
-        assert_ne!(BigInt::from("49520"), BigInt::from("60439"));
-        assert_ne!(BigInt::from("-9074"), BigInt::from("-9075"));
+        assert_ne!(BigInt::from(777), BigInt::from(89));
+        assert_ne!(BigInt::from(49520), BigInt::from(60439));
+        assert_ne!(BigInt::from(-9074), BigInt::from(-9075));
     }
 
     #[test]
@@ -217,14 +245,18 @@ mod tests {
     #[test]
     fn from_unsigned_integer() {
         assert_eq!(BigInt::from(u8::MAX as u8).number, (u8::MAX as u8).to_string());
-        assert_eq!(BigInt::from(u8::MIN as u8).number, (u8::MIN as u8).to_string());
         assert_eq!(BigInt::from(u16::MAX as u16).number, (u16::MAX as u16).to_string());
-        assert_eq!(BigInt::from(u16::MIN as u16).number, (u16::MIN as u16).to_string());
         assert_eq!(BigInt::from(u32::MAX as u32).number, (u32::MAX as u32).to_string());
-        assert_eq!(BigInt::from(u32::MIN as u32).number, (u32::MIN as u32).to_string());
         assert_eq!(BigInt::from(u64::MAX as u64).number, (u64::MAX as u64).to_string());
-        assert_eq!(BigInt::from(u64::MIN as u64).number, (u64::MIN as u64).to_string());
         assert_eq!(BigInt::from(u128::MAX as u128).number, (u128::MAX as u128).to_string());
-        assert_eq!(BigInt::from(u128::MIN as u128).number, (u128::MIN as u128).to_string());
+    }
+
+    #[test]
+    fn cmp() {
+        assert!(BigInt::from(10) > BigInt::from(9));
+        assert!(BigInt::from(32) < BigInt::from(47));
+        assert!(BigInt::from(766) >= BigInt::from(766));
+        assert!(BigInt::from(999) <= BigInt::from(999));
+        assert!(BigInt::from(999) <= BigInt::from(1000));
     }
 }
